@@ -10,7 +10,7 @@ type Props = {
     navigation: DrawerNavigationProp<RootDrawerParamList, 'Stock' | 'Vente'>;
 };
 
-export default function FloatingButton({ navigation }: Props) {
+const FloatingButton: React.FC<Props> = ({ navigation }: Props) => {
     return (
         <View style={[styles.container]}>
             <TouchableWithoutFeedback onPress={() => navigation.openDrawer()}>
@@ -20,7 +20,9 @@ export default function FloatingButton({ navigation }: Props) {
             </TouchableWithoutFeedback>
         </View>
     );
-}
+};
+
+export default FloatingButton;
 
 const styles = StyleSheet.create({
     container: {

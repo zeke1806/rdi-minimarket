@@ -6,11 +6,13 @@ import { RootDrawerParamList } from '../navigation/Drawer';
 
 type Props = DrawerScreenProps<RootDrawerParamList, 'Stock'>;
 
-export default function StockScreen({ navigation }: Props) {
+const StockScreen: React.FC<Props> = ({ navigation }: Props) => {
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <FloatingButton navigation={navigation} />
             <Text>Stock Screen</Text>
         </View>
     );
-}
+};
+
+export default StockScreen;

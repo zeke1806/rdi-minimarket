@@ -4,11 +4,13 @@ import React from 'react';
 import { apollo } from '../src/api/apollo';
 import DrawerNavigator from './navigation/Drawer';
 
-export default function Provider() {
+const Provider: React.FC = () => {
     return (
         <ApolloProvider client={apollo}>
             <DrawerNavigator />
             <StatusBar style="auto" />
         </ApolloProvider>
     );
-}
+};
+
+export default Provider;

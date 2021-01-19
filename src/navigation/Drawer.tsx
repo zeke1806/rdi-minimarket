@@ -36,7 +36,7 @@ function DrawerContent(props: DrawerContentComponentProps) {
     );
 }
 
-export default function DrawerNavigator() {
+const DrawerNavigator: React.FC = () => {
     return (
         <NavigationContainer>
             <Drawer.Navigator initialRouteName="Stock" drawerContent={(props) => <DrawerContent {...props} />}>
@@ -45,4 +45,6 @@ export default function DrawerNavigator() {
             </Drawer.Navigator>
         </NavigationContainer>
     );
-}
+};
+
+export default DrawerNavigator;
