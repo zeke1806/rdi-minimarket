@@ -28,6 +28,8 @@ module.exports = {
             pink: colors.pink,
 
             primary: '#15203D',
+            secondary: '#0E335F',
+            tertiary: '#E8445F',
         },
         spacing: {
             px: '1px',

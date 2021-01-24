@@ -7,8 +7,8 @@ import DrawerNavigator from './navigation/Drawer';
 const Provider: React.FC = () => {
     return (
         <ApolloProvider client={apollo}>
-            <DrawerNavigator />
             <StatusBar style="auto" />
+            <DrawerNavigator />
         </ApolloProvider>
     );
 };
