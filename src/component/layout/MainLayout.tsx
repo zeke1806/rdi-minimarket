@@ -15,12 +15,12 @@ const MainLayout: React.FC<Props> = ({ children, navigation }) => {
     return (
         <View style={[tailwind('flex-1'), { paddingTop: Constants.statusBarHeight }]}>
             <LinearGradient colors={['#0E335F', '#15203D']} style={styles.background} />
-            <View style={tailwind('p-1')}>
+            <View style={tailwind('p-2')}>
                 <TouchableWithoutFeedback onPress={() => navigation.openDrawer()}>
                     <Image source={require('../../../assets/hamberger_menu.png')} style={{ height: 40, width: 40 }} />
                 </TouchableWithoutFeedback>
             </View>
-            <View style={tailwind('p-3')}>{children}</View>
+            <View style={tailwind('p-2')}>{children}</View>
         </View>
     );
 };
