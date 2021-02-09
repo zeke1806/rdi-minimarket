@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, ReactNode } from 'react';
 import { View, StyleSheet, TextInput, Text } from 'react-native';
 import { tailwind } from '../../lib/tailwind';
@@ -34,7 +35,17 @@ const InputContainer: FC<InputContainerProps> = ({ input: Input, right: Right, s
     );
 };
 
-export const SimpleInput: FC = () => {
+interface SimpleInputProps {
+    error?: boolean;
+    value: string;
+    onChange: {
+        (e: React.ChangeEvent<any>): void;
+        <T = string | React.ChangeEvent<any>>(field: T): T extends React.ChangeEvent<any>
+            ? void
+            : (e: string | React.ChangeEvent<any>) => void;
+    };
+}
+export const SimpleInput: FC<SimpleInputProps> = ({ value, onChange, error }) => {
     return (
         <InputContainer
             input={
@@ -42,9 +53,12 @@ export const SimpleInput: FC = () => {
                     style={tailwind('text-white')}
                     placeholderTextColor="white"
                     placeholder="Ajouter une categorie"
+                    value={value}
+                    onChangeText={onChange}
                 />
             }
-            right={<Ionicons name="md-search" size={24} color="white" />}
+            right={<Ionicons name="add" size={24} color="white" />}
+            error={error}
         />
     );
 };

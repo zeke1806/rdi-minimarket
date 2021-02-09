@@ -1,10 +1,9 @@
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import * as React from 'react';
-import { Text } from 'react-native';
 import MainLayout from '../component/layout/MainLayout';
 import { RootDrawerParamList } from '../navigation/Drawer';
 import Title from '../component/public/Titile';
-import { CreateCategory } from '../component/stock/FormCategory';
+import CreateCategory from '../component/stock/CreateCategory';
 import Space from '../component/public/Space';
 
 type Props = DrawerScreenProps<RootDrawerParamList, 'Stock'>;
