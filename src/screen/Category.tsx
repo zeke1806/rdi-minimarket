@@ -3,12 +3,12 @@ import * as React from 'react';
 import MainLayout from '../component/layout/MainLayout';
 import { RootDrawerParamList } from '../navigation/Drawer';
 import Title from '../component/public/Titile';
-import CreateCategory from '../component/stock/CreateCategory';
+import CreateCategory from '../component/category/CreateCategory';
 import Space from '../component/public/Space';
 
 type Props = DrawerScreenProps<RootDrawerParamList, 'Stock'>;
 
-const StockScreen: React.FC<Props> = ({ navigation }: Props) => {
+const CategoryScreen: React.FC<Props> = ({ navigation }: Props) => {
     return (
         <MainLayout navigation={navigation}>
             <Title text={'Categorie de produit'} />
@@ -18,4 +18,4 @@ const StockScreen: React.FC<Props> = ({ navigation }: Props) => {
     );
 };
 
-export default StockScreen;
+export default CategoryScreen;

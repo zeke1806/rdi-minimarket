@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, ReactNode } from 'react';
-import { View, StyleSheet, TextInput, Text } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { tailwind } from '../../lib/tailwind';
 import { Ionicons } from '@expo/vector-icons';
 
-interface InputContainerProps {
+interface Props {
     input: ReactNode;
     right?: ReactNode;
     searchResult?: string;
     success?: boolean;
     error?: boolean;
 }
-const InputContainer: FC<InputContainerProps> = ({ input: Input, right: Right, searchResult, success, error }) => {
+const StyledInput: FC<Props> = ({ input: Input, right: Right, searchResult, success, error }) => {
     return (
         <View>
             <View
@@ -35,33 +35,7 @@ const InputContainer: FC<InputContainerProps> = ({ input: Input, right: Right, s
     );
 };
 
-interface SimpleInputProps {
-    error?: boolean;
-    value: string;
-    onChange: {
-        (e: React.ChangeEvent<any>): void;
-        <T = string | React.ChangeEvent<any>>(field: T): T extends React.ChangeEvent<any>
-            ? void
-            : (e: string | React.ChangeEvent<any>) => void;
-    };
-}
-export const SimpleInput: FC<SimpleInputProps> = ({ value, onChange, error }) => {
-    return (
-        <InputContainer
-            input={
-                <TextInput
-                    style={tailwind('text-white')}
-                    placeholderTextColor="white"
-                    placeholder="Ajouter une categorie"
-                    value={value}
-                    onChangeText={onChange}
-                />
-            }
-            right={<Ionicons name="add" size={24} color="white" />}
-            error={error}
-        />
-    );
-};
+export default StyledInput;
 
 const styles = StyleSheet.create({
     inputCtn: {

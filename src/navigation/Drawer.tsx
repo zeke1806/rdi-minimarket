@@ -7,7 +7,7 @@ import {
 } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import VenteScreen from '../screen/Vente';
-import StockScreen from '../screen/Stock';
+import StockNavigator from './Stock';
 import { Image, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { tailwind } from '../lib/tailwind';
@@ -60,7 +60,7 @@ const DrawerNavigator: React.FC = () => {
                     options={{
                         drawerIcon: drawerIcon('ios-albums'),
                     }}
-                    component={StockScreen}
+                    component={StockNavigator}
                 />
                 <Drawer.Screen
                     name="Vente"

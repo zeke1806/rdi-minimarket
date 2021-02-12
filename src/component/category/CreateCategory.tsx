@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC } from 'react';
-import { View } from 'react-native';
+import { View, TextInput } from 'react-native';
 import { tailwind } from '../../lib/tailwind';
 import Space from '../public/Space';
-import { SimpleInput } from '../public/StyledInput';
+import StyledInput from '../public/StyledInput';
 import SubmitBtn from '../public/SubmitBtn';
 import { Formik } from 'formik';
+import { Ionicons } from '@expo/vector-icons';
 
 const CreateCategory: FC = () => {
     return (
@@ -27,9 +28,17 @@ const CreateCategory: FC = () => {
         >
             {({ values, handleChange, isSubmitting, handleSubmit, errors }) => (
                 <View>
-                    <SimpleInput
-                        value={values.category}
-                        onChange={handleChange('category')}
+                    <StyledInput
+                        input={
+                            <TextInput
+                                style={tailwind('text-white')}
+                                placeholderTextColor="white"
+                                placeholder="Ajouter une categorie"
+                                value={values.category}
+                                onChangeText={handleChange}
+                            />
+                        }
+                        right={<Ionicons name="add" size={24} color="white" />}
                         error={errors.category ? true : false}
                     />
                     <Space />
