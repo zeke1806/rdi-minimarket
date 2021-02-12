@@ -15,11 +15,7 @@ const StyledInput: FC<Props> = ({ input: Input, right: Right, searchResult, succ
     return (
         <View>
             <View
-                style={[
-                    styles.inputCtn,
-                    styles.shadow,
-                    tailwind('p-4 rounded-md flex-row items-center justify-between'),
-                ]}
+                style={[styles.shadow, tailwind('p-4 rounded-md flex-row items-center justify-between bg-secondary')]}
             >
                 <View>{Input}</View>
                 <View style={tailwind('ml-1 flex-row justify-between')}>
@@ -38,11 +34,6 @@ const StyledInput: FC<Props> = ({ input: Input, right: Right, searchResult, succ
 export default StyledInput;
 
 const styles = StyleSheet.create({
-    inputCtn: {
-        backgroundColor: '#0E2445',
-        opacity: 1,
-    },
-
     shadow: {
         shadowColor: '#000',
         shadowOffset: {

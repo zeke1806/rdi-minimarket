@@ -14,7 +14,7 @@ type Props = {
 const MainLayout: React.FC<Props> = ({ children, navigation }) => {
     return (
         <View style={[tailwind('flex-1'), { paddingTop: Constants.statusBarHeight }]}>
-            <LinearGradient colors={['#0E335F', '#15203D']} style={styles.background} />
+            <LinearGradient colors={['#15203D', '#0D061E']} style={styles.background} />
             <View style={tailwind('p-2')}>
                 <TouchableWithoutFeedback onPress={() => navigation.openDrawer()}>
                     <Image source={require('../../../assets/hamberger_menu.png')} style={{ height: 40, width: 40 }} />
