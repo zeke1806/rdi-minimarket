@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, ReactNode } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import { tailwind } from '../../lib/tailwind';
 import { Ionicons } from '@expo/vector-icons';
+import { styles } from '../../styles';
 
 interface Props {
     input: ReactNode;
@@ -32,17 +33,3 @@ const StyledInput: FC<Props> = ({ input: Input, right: Right, searchResult, succ
 };
 
 export default StyledInput;
-
-const styles = StyleSheet.create({
-    shadow: {
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 3,
-        },
-        shadowOpacity: 0.27,
-        shadowRadius: 4.65,
-
-        elevation: 6,
-    },
-});

@@ -6,6 +6,7 @@ import Title from '../component/public/Titile';
 import CreateCategory from '../component/category/CreateCategory';
 import Space from '../component/public/Space';
 import SearchCategory from '../component/category/SearchCategory';
+import ListCategory from '../component/category/ListCategory';
 
 type Props = DrawerScreenProps<RootDrawerParamList, 'Stock'>;
 
@@ -17,6 +18,8 @@ const CategoryScreen: React.FC<Props> = ({ navigation }: Props) => {
             <CreateCategory />
             <Space nb={2} />
             <SearchCategory />
+            <Space nb={2} />
+            <ListCategory />
         </MainLayout>
     );
 };

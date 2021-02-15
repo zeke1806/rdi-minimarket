@@ -20,7 +20,7 @@ const MainLayout: React.FC<Props> = ({ children, navigation }) => {
                     <Image source={require('../../../assets/hamberger_menu.png')} style={{ height: 40, width: 40 }} />
                 </TouchableWithoutFeedback>
             </View>
-            <View style={tailwind('p-2')}>{children}</View>
+            <View style={tailwind('flex-1 p-2')}>{children}</View>
         </View>
     );
 };
