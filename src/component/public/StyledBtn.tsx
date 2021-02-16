@@ -34,8 +34,8 @@ export const IconBtn: FC<IconBtnProps> = ({ onPress, disabled, icon: Icon }) => 
     return (
         <TouchableOpacity
             style={[
-                tailwind('self-start py-2 px-6 rounded-md relative'),
-                disabled ? tailwind('bg-gray-500') : tailwind('bg-tertiary '),
+                tailwind('self-start p-3 rounded-full relative'),
+                disabled ? tailwind('bg-gray-500') : tailwind('bg-tertiary bg-opacity-70'),
             ]}
             onPress={onPress}
             disabled={disabled}
