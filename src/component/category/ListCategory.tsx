@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, ReactNode } from 'react';
+import React, { FC, ReactElement } from 'react';
 import { ListRenderItem, Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { tailwind } from '../../lib/tailwind';
@@ -38,7 +38,10 @@ const DATA = [
     },
 ];
 
-const ListCategory: FC = () => {
+interface Props {
+    header: ReactElement;
+}
+const ListCategory: FC<Props> = ({ header: Header }) => {
     const renderItem: ListRenderItem<typeof DATA[0]> = ({ item }) => (
         <ListItemCtn>
             <View style={tailwind('flex-1')}>
@@ -55,7 +58,16 @@ const ListCategory: FC = () => {
         </ListItemCtn>
     );
 
-    return <FlatList data={DATA} renderItem={renderItem} keyExtractor={(item) => item.id.toString()} />;
+    return (
+        <>
+            <FlatList
+                ListHeaderComponent={() => Header}
+                data={DATA}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.id.toString()}
+            />
+        </>
+    );
 };
 
 export default ListCategory;

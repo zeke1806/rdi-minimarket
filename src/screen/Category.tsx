@@ -15,11 +15,16 @@ const CategoryScreen: React.FC<Props> = ({ navigation }: Props) => {
         <MainLayout navigation={navigation}>
             <Title text={'Categorie de produit'} />
             <Space nb={2} />
-            <CreateCategory />
-            <Space nb={2} />
-            <SearchCategory />
-            <Space nb={2} />
-            <ListCategory />
+            <ListCategory
+                header={
+                    <>
+                        <CreateCategory />
+                        <Space nb={2} />
+                        <SearchCategory />
+                        <Space nb={2} />
+                    </>
+                }
+            />
         </MainLayout>
     );
 };

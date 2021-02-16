@@ -4,7 +4,7 @@ import { View, TextInput } from 'react-native';
 import { tailwind } from '../../lib/tailwind';
 import Space from '../public/Space';
 import StyledInput from '../public/StyledInput';
-import SubmitBtn from '../public/SubmitBtn';
+import { SubmitBtn } from '../public/StyledBtn';
 import { Formik } from 'formik';
 import { Ionicons } from '@expo/vector-icons';
 
