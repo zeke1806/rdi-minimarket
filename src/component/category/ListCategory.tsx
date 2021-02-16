@@ -1,5 +1,5 @@
-import React, { FC, ReactElement, useRef, useState } from 'react';
-import { ListRenderItem, Text, View } from 'react-native';
+import React, { FC, ReactElement, useEffect, useRef, useState } from 'react';
+import { ListRenderItem, Text, View, Animated } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { tailwind } from '../../lib/tailwind';
 import ListItemCtn from '../public/ListItemCtn';
@@ -45,6 +45,23 @@ interface Props {
 const ListCategory: FC<Props> = ({ header: Header }) => {
     const [offsetY, setOffsetY] = useState(0);
     const listRef = useRef<FlatList<typeof DATA[0]>>(null);
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+
+    const hideScrollBtn = offsetY < 150;
+
+    useEffect(() => {
+        let toValue = 0;
+        if (hideScrollBtn) {
+            toValue = 0;
+        } else {
+            toValue = 1;
+        }
+        Animated.timing(fadeAnim, {
+            toValue,
+            duration: 200,
+            useNativeDriver: true,
+        }).start();
+    }, [fadeAnim, hideScrollBtn]);
 
     const renderItem: ListRenderItem<typeof DATA[0]> = ({ item }) => (
         <ListItemCtn>
@@ -74,16 +91,22 @@ const ListCategory: FC<Props> = ({ header: Header }) => {
                     setOffsetY(e.nativeEvent.contentOffset.y);
                 }}
             />
-            {offsetY > 150 && (
-                <View style={[tailwind('absolute bottom-1 left-0 right-0 flex flex-row justify-center')]}>
-                    <IconBtn
-                        onPress={() => {
-                            listRef.current && listRef.current.scrollToOffset({ animated: true, offset: 0 });
-                        }}
-                        icon={<Ionicons name="md-arrow-up" size={24} color="white" />}
-                    />
-                </View>
-            )}
+            <Animated.View
+                style={[
+                    tailwind('absolute bottom-1 left-0 right-0 flex flex-row justify-center'),
+                    {
+                        opacity: fadeAnim,
+                    },
+                ]}
+            >
+                <IconBtn
+                    onPress={() => {
+                        listRef.current && listRef.current.scrollToOffset({ animated: true, offset: 0 });
+                    }}
+                    icon={<Ionicons name="md-arrow-up" size={24} color="white" />}
+                    disabled={hideScrollBtn}
+                />
+            </Animated.View>
         </>
     );
 };
