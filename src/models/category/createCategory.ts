@@ -1,5 +1,6 @@
 import { FetchResult, gql, MutationFunctionOptions, useMutation } from '@apollo/client';
-import { FormikValues, useFormik } from 'formik';
+import { FormikErrors, useFormik } from 'formik';
+import { FormEvent, ChangeEvent } from 'react';
 
 import { CATEGORY_FRAG } from '../../lib/apollo/fragment';
 import { Category, CreateCategoryInput, MutationCreateCategoryArgs } from '../../lib/apollo/types';
@@ -17,16 +18,13 @@ const CREATE_CATEGORY = gql`
     ${CATEGORY_FRAG}
 `;
 
-const useMutationCreateCategory = (
-    input: MutationCreateCategoryArgs,
-): {
+export const useMutationCreateCategory = (): {
     createCategory: (
         options?: MutationFunctionOptions<CreateCategoryData, MutationCreateCategoryArgs>,
     ) => Promise<FetchResult<CreateCategoryData, Record<string, unknown>, Record<string, unknown>>>;
     loading: boolean;
 } => {
     const [createCategory, { loading }] = useMutation<CreateCategoryData, MutationCreateCategoryArgs>(CREATE_CATEGORY, {
-        variables: input,
         update: (cache, { data }): void => {
             if (!data) return;
             cache.modify({
@@ -40,16 +38,42 @@ const useMutationCreateCategory = (
     };
 };
 
-interface UseFormCreateCatgory {
-    
-}
-
-export const useFormCreateCatgory = () => {
-    const initialValues: CreateCategoryInput = {
-        name: '',
+export const useCreateCategory = (): {
+    values: CreateCategoryInput;
+    handleSubmit: (e?: FormEvent<HTMLFormElement>) => void;
+    handleChange: {
+        (e: ChangeEvent<unknown>): void;
+        <T_1 = string | ChangeEvent<unknown>>(field: T_1): T_1 extends ChangeEvent<unknown>
+            ? void
+            : (e: string | ChangeEvent<unknown>) => void;
     };
-    return useFormik({
-        initialValues,
-        onSubmit: 
+    loading: boolean;
+    errors: FormikErrors<CreateCategoryInput>;
+} => {
+    const { createCategory, loading } = useMutationCreateCategory();
+    const { values, handleChange, handleSubmit, errors } = useFormik({
+        initialValues: {
+            name: '',
+        } as CreateCategoryInput,
+        validate: (values): Record<string, string> => {
+            const errors: Record<string, string> = {};
+            if (values.name === '') errors.name = 'Le nom de la categorie est requis';
+            return errors;
+        },
+        onSubmit: (values): void => {
+            createCategory({
+                variables: {
+                    input: values,
+                },
+            });
+        },
     });
+
+    return {
+        values,
+        handleSubmit,
+        handleChange,
+        loading,
+        errors,
+    };
 };
