@@ -24,14 +24,7 @@ export const useMutationCreateCategory = (): {
     ) => Promise<FetchResult<CreateCategoryData, Record<string, unknown>, Record<string, unknown>>>;
     loading: boolean;
 } => {
-    const [createCategory, { loading }] = useMutation<CreateCategoryData, MutationCreateCategoryArgs>(CREATE_CATEGORY, {
-        update: (cache, { data }): void => {
-            if (!data) return;
-            cache.modify({
-                fields: {},
-            });
-        },
-    });
+    const [createCategory, { loading }] = useMutation<CreateCategoryData, MutationCreateCategoryArgs>(CREATE_CATEGORY);
     return {
         createCategory,
         loading,
@@ -49,9 +42,10 @@ export const useCreateCategory = (): {
     };
     loading: boolean;
     errors: FormikErrors<CreateCategoryInput>;
+    isSubmitting: boolean;
 } => {
     const { createCategory, loading } = useMutationCreateCategory();
-    const { values, handleChange, handleSubmit, errors } = useFormik({
+    const { values, handleChange, handleSubmit, errors, isSubmitting } = useFormik({
         initialValues: {
             name: '',
         } as CreateCategoryInput,
@@ -60,12 +54,19 @@ export const useCreateCategory = (): {
             if (values.name === '') errors.name = 'Le nom de la categorie est requis';
             return errors;
         },
-        onSubmit: (values): void => {
-            createCategory({
-                variables: {
-                    input: values,
-                },
-            });
+        onSubmit: async (values, { setSubmitting, resetForm }): Promise<void> => {
+            try {
+                await createCategory({
+                    variables: {
+                        input: values,
+                    },
+                });
+                resetForm();
+            } catch (error) {
+                console.error('createCategory ', error);
+            } finally {
+                setSubmitting(false);
+            }
         },
     });
 
@@ -75,5 +76,6 @@ export const useCreateCategory = (): {
         handleChange,
         loading,
         errors,
+        isSubmitting,
     };
 };
