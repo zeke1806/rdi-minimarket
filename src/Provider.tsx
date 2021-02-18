@@ -1,7 +1,7 @@
 import { ApolloProvider } from '@apollo/client';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { apollo } from '../src/api/apollo';
+import { apollo } from './lib/apollo';
 import DrawerNavigator from './navigation/Drawer';
 
 const Provider: React.FC = () => {
