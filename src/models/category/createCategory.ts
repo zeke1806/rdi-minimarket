@@ -3,7 +3,7 @@ import { FormikErrors, useFormik } from 'formik';
 import { FormEvent, ChangeEvent } from 'react';
 
 import { CATEGORY_FRAG } from '../../lib/apollo/fragment';
-import { Category, CreateCategoryInput, MutationCreateCategoryArgs } from '../../lib/apollo/types';
+import { Categories, Category, CreateCategoryInput, MutationCreateCategoryArgs } from '../../lib/apollo/types';
 
 interface CreateCategoryData {
     createCategory: Category;
@@ -24,7 +24,28 @@ export const useMutationCreateCategory = (): {
     ) => Promise<FetchResult<CreateCategoryData, Record<string, unknown>, Record<string, unknown>>>;
     loading: boolean;
 } => {
-    const [createCategory, { loading }] = useMutation<CreateCategoryData, MutationCreateCategoryArgs>(CREATE_CATEGORY);
+    const [createCategory, { loading }] = useMutation<CreateCategoryData, MutationCreateCategoryArgs>(CREATE_CATEGORY, {
+        update(cache, { data }) {
+            if (data) {
+                const { createCategory } = data;
+                cache.modify({
+                    fields: {
+                        categories(existing) {
+                            const existingCategories = existing ? existing.data : [];
+                            const newCategory = cache.writeFragment({
+                                data: createCategory,
+                                fragment: CATEGORY_FRAG,
+                            });
+                            return {
+                                ...existing,
+                                data: [newCategory, ...existingCategories],
+                            };
+                        },
+                    },
+                });
+            }
+        },
+    });
     return {
         createCategory,
         loading,
