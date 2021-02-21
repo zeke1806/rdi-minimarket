@@ -7,10 +7,13 @@ import CreateCategory from '../component/category/CreateCategory';
 import Space from '../component/public/Space';
 import SearchCategory from '../component/category/SearchCategory';
 import ListCategory from '../component/category/ListCategory';
+import { useCategories } from '../models/category/categories';
 
 type Props = DrawerScreenProps<RootDrawerParamList, 'Stock'>;
 
 const CategoryScreen: React.FC<Props> = ({ navigation }: Props) => {
+    const { data, paginationInfo } = useCategories();
+
     return (
         <MainLayout navigation={navigation}>
             <Title text={'Categorie de produit'} />
@@ -24,6 +27,7 @@ const CategoryScreen: React.FC<Props> = ({ navigation }: Props) => {
                         <Space nb={2} />
                     </>
                 }
+                data={data}
             />
         </MainLayout>
     );

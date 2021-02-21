@@ -29,11 +29,14 @@ interface IconBtnProps {
     onPress: () => void;
     disabled?: boolean;
     icon: ReactElement;
+    circle?: boolean;
 }
-export const IconBtn: FC<IconBtnProps> = ({ onPress, disabled, icon: Icon }) => {
+export const IconBtn: FC<IconBtnProps> = ({ onPress, circle, disabled, icon: Icon }) => {
     return (
         <TouchableOpacity
-            style={[tailwind('self-start p-3 rounded-full relative'), tailwind('bg-tertiary bg-opacity-70')]}
+            style={[
+                tailwind(`self-start p-3 relative bg-tertiary bg-opacity-70 ${circle ? 'rounded-full' : 'rounded-md'}`),
+            ]}
             onPress={onPress}
             disabled={disabled}
         >

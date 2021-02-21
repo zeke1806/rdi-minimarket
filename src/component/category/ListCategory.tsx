@@ -5,46 +5,15 @@ import { tailwind } from '../../lib/tailwind';
 import ListItemCtn from '../public/ListItemCtn';
 import { Ionicons } from '@expo/vector-icons';
 import { IconBtn } from '../public/StyledBtn';
-
-const DATA = [
-    {
-        id: 1,
-        name: 'ppn',
-        nbProduit: 3,
-    },
-    {
-        id: 2,
-        name: 'conserve',
-        nbProduit: 3,
-    },
-    {
-        id: 3,
-        name: 'conserve de luxe',
-        nbProduit: 3,
-    },
-    {
-        id: 4,
-        name: 'conserve de luxe',
-        nbProduit: 3,
-    },
-    {
-        id: 5,
-        name: 'conserve de luxe',
-        nbProduit: 3,
-    },
-    {
-        id: 6,
-        name: 'conserve de luxe',
-        nbProduit: 3,
-    },
-];
+import { Category } from '../../lib/apollo/types';
 
 interface Props {
     header: ReactElement;
+    data: Category[];
 }
-const ListCategory: FC<Props> = ({ header: Header }) => {
+const ListCategory: FC<Props> = ({ header: Header, data }) => {
     const [offsetY, setOffsetY] = useState(0);
-    const listRef = useRef<FlatList<typeof DATA[0]>>(null);
+    const listRef = useRef<FlatList<Category>>(null);
     const fadeAnim = useRef(new Animated.Value(0)).current;
 
     const hideScrollBtn = offsetY < 150;
@@ -63,14 +32,14 @@ const ListCategory: FC<Props> = ({ header: Header }) => {
         }).start();
     }, [fadeAnim, hideScrollBtn]);
 
-    const renderItem: ListRenderItem<typeof DATA[0]> = ({ item }) => (
+    const renderItem: ListRenderItem<Category> = ({ item }) => (
         <ListItemCtn>
             <View style={tailwind('flex-1')}>
                 <Text style={tailwind('text-white font-bold text-lg')}>{item.name.toUpperCase()}</Text>
             </View>
             <View style={tailwind('flex-1 items-center')}>
                 <Text style={tailwind('text-white font-thin')}>
-                    {item.nbProduit} produit{item.nbProduit > 0 ? 's' : ''}
+                    {'20'} produit{2 > 0 ? 's' : ''}
                 </Text>
             </View>
             <View style={tailwind('flex-1 items-end')}>
@@ -84,7 +53,7 @@ const ListCategory: FC<Props> = ({ header: Header }) => {
             <FlatList
                 ref={listRef}
                 ListHeaderComponent={() => Header}
-                data={DATA}
+                data={data}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id.toString()}
                 onScroll={(e) => {
@@ -105,6 +74,7 @@ const ListCategory: FC<Props> = ({ header: Header }) => {
                     }}
                     icon={<Ionicons name="md-arrow-up" size={24} color="white" />}
                     disabled={hideScrollBtn}
+                    circle
                 />
             </Animated.View>
         </>
