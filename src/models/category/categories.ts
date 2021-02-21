@@ -2,13 +2,10 @@ import { gql, useLazyQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { PAGINATION_TAKE } from '../../config';
 import { CATEGORY_FRAG } from '../../lib/apollo/fragment';
-import { Category, CPaginationInfo, QueryCategoriesArgs } from '../../lib/apollo/types';
+import { Categories, QueryCategoriesArgs } from '../../lib/apollo/types';
 
 interface CategoriesData {
-    categories: {
-        data: Category[];
-        paginationInfo: CPaginationInfo;
-    };
+    categories: Categories;
 }
 
 const CATEGORIES = gql`
@@ -41,7 +38,8 @@ export const useQueryCategories = () => {
 export const useCategories = () => {
     const [filter, setFilter] = useState('');
     const { fetchCategories, loading, data, fetchMore } = useQueryCategories();
-    const handleChange = (value: string) => setFilter(value);
+    const paginationInfo = data ? data.categories.paginationInfo : null;
+    const categories = data ? data.categories.data : [];
 
     useEffect(() => {
         fetchCategories({
@@ -54,10 +52,25 @@ export const useCategories = () => {
         });
     }, []);
 
+    const handleChange = (value: string) => setFilter(value);
+    const handleFetchMore = () => {
+        if (fetchMore && (paginationInfo ? categories.length < paginationInfo.total : true)) {
+            fetchMore({
+                variables: {
+                    filterName: filter,
+                    pagination: {
+                        take: PAGINATION_TAKE,
+                        cursor: paginationInfo && paginationInfo.cursor,
+                    },
+                },
+            });
+        }
+    };
+
     return {
-        data: data ? data.categories.data : [],
-        paginationInfo: data ? data.categories.paginationInfo : null,
-        fetchMore,
+        categories,
+        paginationInfo,
+        handleFetchMore,
         loading,
         fetchCategories,
         handleChange,

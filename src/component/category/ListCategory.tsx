@@ -10,8 +10,9 @@ import { Category } from '../../lib/apollo/types';
 interface Props {
     header: ReactElement;
     data: Category[];
+    fetchMoreCategory: () => void;
 }
-const ListCategory: FC<Props> = ({ header: Header, data }) => {
+const ListCategory: FC<Props> = ({ header: Header, data, fetchMoreCategory }) => {
     const [offsetY, setOffsetY] = useState(0);
     const listRef = useRef<FlatList<Category>>(null);
     const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -56,9 +57,9 @@ const ListCategory: FC<Props> = ({ header: Header, data }) => {
                 data={data}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id.toString()}
-                onScroll={(e) => {
-                    setOffsetY(e.nativeEvent.contentOffset.y);
-                }}
+                onScroll={(e) => setOffsetY(e.nativeEvent.contentOffset.y)}
+                onEndReachedThreshold={0.01}
+                onEndReached={() => fetchMoreCategory()}
             />
             <Animated.View
                 style={[
