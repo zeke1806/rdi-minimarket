@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { ListRenderItem, Text, View, Animated } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { tailwind } from '../../lib/tailwind';
@@ -8,7 +8,7 @@ import { IconBtn } from '../public/StyledBtn';
 import { Category } from '../../lib/apollo/types';
 
 interface Props {
-    header: ReactElement;
+    header: FC;
     data: Category[];
     fetchMoreCategory: () => void;
 }
@@ -53,7 +53,7 @@ const ListCategory: FC<Props> = ({ header: Header, data, fetchMoreCategory }) =>
         <>
             <FlatList
                 ref={listRef}
-                ListHeaderComponent={() => Header}
+                ListHeaderComponent={Header}
                 data={data}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id.toString()}

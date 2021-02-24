@@ -1,5 +1,5 @@
-import { gql, useLazyQuery } from '@apollo/client';
-import { useEffect, useState } from 'react';
+import { gql, useQuery } from '@apollo/client';
+import { useState } from 'react';
 import { PAGINATION_TAKE } from '../../config';
 import { CATEGORY_FRAG } from '../../lib/apollo/fragment';
 import { Categories, QueryCategoriesArgs } from '../../lib/apollo/types';
@@ -24,11 +24,15 @@ const CATEGORIES = gql`
 `;
 
 export const useQueryCategories = () => {
-    const [fetchCategories, { loading, data, fetchMore }] = useLazyQuery<CategoriesData, QueryCategoriesArgs>(
-        CATEGORIES,
-    );
+    const { loading, data, fetchMore } = useQuery<CategoriesData, QueryCategoriesArgs>(CATEGORIES, {
+        variables: {
+            filterName: '',
+            pagination: {
+                take: PAGINATION_TAKE,
+            },
+        },
+    });
     return {
-        fetchCategories,
         loading,
         data,
         fetchMore,
@@ -37,20 +41,9 @@ export const useQueryCategories = () => {
 
 export const useCategories = () => {
     const [filter, setFilter] = useState('');
-    const { fetchCategories, loading, data, fetchMore } = useQueryCategories();
+    const { loading, data, fetchMore } = useQueryCategories();
     const paginationInfo = data ? data.categories.paginationInfo : null;
     const categories = data ? data.categories.data : [];
-
-    useEffect(() => {
-        fetchCategories({
-            variables: {
-                filterName: filter,
-                pagination: {
-                    take: PAGINATION_TAKE,
-                },
-            },
-        });
-    }, []);
 
     const handleChange = (value: string) => setFilter(value);
     const handleFetchMore = () => {
@@ -72,7 +65,6 @@ export const useCategories = () => {
         paginationInfo,
         handleFetchMore,
         loading,
-        fetchCategories,
         handleChange,
         filter,
     };

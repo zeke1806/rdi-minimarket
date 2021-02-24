@@ -3,7 +3,7 @@ import { FormikErrors, useFormik } from 'formik';
 import { FormEvent, ChangeEvent } from 'react';
 
 import { CATEGORY_FRAG } from '../../lib/apollo/fragment';
-import { Categories, Category, CreateCategoryInput, MutationCreateCategoryArgs } from '../../lib/apollo/types';
+import { Category, CreateCategoryInput, MutationCreateCategoryArgs } from '../../lib/apollo/types';
 
 interface CreateCategoryData {
     createCategory: Category;
@@ -76,18 +76,20 @@ export const useCreateCategory = (): {
             return errors;
         },
         onSubmit: async (values, { setSubmitting, resetForm }): Promise<void> => {
-            try {
-                await createCategory({
-                    variables: {
-                        input: values,
-                    },
+            createCategory({
+                variables: {
+                    input: values,
+                },
+            })
+                .then(() => {
+                    resetForm();
+                })
+                .catch((error) => {
+                    console.error('createCategory ', error);
+                })
+                .finally(() => {
+                    setSubmitting(false);
                 });
-                resetForm();
-            } catch (error) {
-                console.error('createCategory ', error);
-            } finally {
-                setSubmitting(false);
-            }
         },
     });
 
