@@ -2,14 +2,35 @@
 import React, { FC } from 'react';
 import { View, TextInput } from 'react-native';
 import { tailwind } from '../../lib/tailwind';
-import Space from '../public/Space';
-import StyledInput from '../public/StyledInput';
+import { CreateCategoryInput } from '../../lib/apollo/types';
 import { SubmitBtn } from '../public/StyledBtn';
 import { Ionicons } from '@expo/vector-icons';
-import { useCreateCategory } from '../../models/category/createCategory';
+import { useFormik } from 'formik';
+import Space from '../public/Space';
+import StyledInput from '../public/StyledInput';
+import { useAppDispatch } from '../../redux/store';
+import { createNewCategory } from '../../redux/categorySlice';
 
 const CreateCategory: FC = () => {
-    const { values, handleChange, handleSubmit, errors, isSubmitting } = useCreateCategory();
+    const dispatch = useAppDispatch();
+    const { values, handleChange, handleSubmit, errors, isSubmitting } = useFormik({
+        initialValues: {
+            name: '',
+        } as CreateCategoryInput,
+        validate: (values): Record<string, string> => {
+            const errors: Record<string, string> = {};
+            if (values.name === '') errors.name = 'Le nom de la categorie est requis';
+            return errors;
+        },
+        onSubmit: async (values, { setSubmitting, resetForm }): Promise<void> => {
+            dispatch(
+                createNewCategory({
+                    input: values,
+                }),
+            );
+        },
+    });
+
     return (
         <View>
             <StyledInput
