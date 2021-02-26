@@ -35,7 +35,8 @@ export const IconBtn: FC<IconBtnProps> = ({ onPress, circle, disabled, icon: Ico
     return (
         <TouchableOpacity
             style={[
-                tailwind(`self-start p-3 relative bg-tertiary bg-opacity-70 ${circle ? 'rounded-full' : 'rounded-md'}`),
+                tailwind(`self-start p-3 relative ${circle ? 'rounded-full' : 'rounded-md'}`),
+                disabled ? tailwind('bg-gray-500') : tailwind('bg-tertiary '),
             ]}
             onPress={onPress}
             disabled={disabled}

@@ -6,10 +6,11 @@ import { CreateCategoryInput } from '../../lib/apollo/types';
 import { SubmitBtn } from '../public/StyledBtn';
 import { Ionicons } from '@expo/vector-icons';
 import { useFormik } from 'formik';
-import Space from '../public/Space';
-import StyledInput from '../public/StyledInput';
 import { useAppDispatch } from '../../redux/store';
 import { createNewCategory } from '../../redux/categorySlice';
+import { unwrapResult } from '@reduxjs/toolkit';
+import Space from '../public/Space';
+import StyledInput from '../public/StyledInput';
 
 const CreateCategory: FC = () => {
     const dispatch = useAppDispatch();
@@ -27,7 +28,10 @@ const CreateCategory: FC = () => {
                 createNewCategory({
                     input: values,
                 }),
-            );
+            )
+                .then(unwrapResult)
+                .then(() => resetForm())
+                .finally(() => setSubmitting(false));
         },
     });
 
