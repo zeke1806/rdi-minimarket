@@ -1,7 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { RootDrawerParamList } from '../navigation/Drawer';
 import { useCategories } from '../models/category/categories';
+import { useAppDispatch, useAppSelector } from '../redux/store';
+import { fetchCategories } from '../redux/categorySlice';
 import MainLayout from '../component/layout/MainLayout';
 import Title from '../component/public/Titile';
 import CreateCategory from '../component/category/CreateCategory';
@@ -9,6 +11,7 @@ import Space from '../component/public/Space';
 import SearchCategory from '../component/category/SearchCategory';
 import ListCategory from '../component/category/ListCategory';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import { PAGINATION_TAKE } from '../config';
 
 const ListHeader: FC = () => (
     <>
@@ -32,7 +35,20 @@ const ListFooter: FC<{ loading: boolean }> = ({ loading }) => {
 
 type Props = DrawerScreenProps<RootDrawerParamList, 'Stock'>;
 const CategoryScreen: FC<Props> = ({ navigation }: Props) => {
-    const { categories, handleFetchMore, loading } = useCategories();
+    const dispatch = useAppDispatch();
+    const categories = useAppSelector((state) => state.category.categories);
+    const { handleFetchMore, loading } = useCategories();
+
+    useEffect(() => {
+        dispatch(
+            fetchCategories({
+                filterName: '',
+                pagination: {
+                    take: PAGINATION_TAKE,
+                },
+            }),
+        );
+    }, []);
 
     return (
         <MainLayout navigation={navigation}>
