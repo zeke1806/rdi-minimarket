@@ -15,7 +15,7 @@ const CategoryScreen: FC<Props> = ({ navigation }: Props) => {
     const [filter, setFilter] = useState('');
     const dispatch = useAppDispatch();
     const listCategories = useAppSelector((state) => state.category.categories.data);
-    const loading = useAppSelector((state) => state.category.fetchCategoriesStatus) === 'loading';
+    const loading = useAppSelector((state) => state.category.fetchCategoriesStatus.state) === 'loading';
     const pagination = useAppSelector((state) => state.category.categories.paginationInfo);
 
     useEffect(() => {

@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { categories, createCategory } from '../lib/apollo/category';
 import { Categories, MutationCreateCategoryArgs, QueryCategoriesArgs } from '../lib/apollo/types';
-import { QueryState } from './types';
+import { QueryStatus } from './types';
 
 const sliceName = 'category';
 
@@ -31,7 +31,8 @@ export const createNewCategory = createAsyncThunk(
 
 interface CategoryState {
     categories: Categories;
-    fetchCategoriesStatus: QueryState;
+    fetchCategoriesStatus: QueryStatus;
+    createCategoryStatus: QueryStatus;
 }
 
 const initialState: CategoryState = {
@@ -42,7 +43,12 @@ const initialState: CategoryState = {
             cursor: null,
         },
     },
-    fetchCategoriesStatus: 'stateless',
+    fetchCategoriesStatus: {
+        state: 'stateless',
+    },
+    createCategoryStatus: {
+        state: 'stateless',
+    },
 };
 
 const categorySlice = createSlice({
@@ -51,7 +57,7 @@ const categorySlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(fetchCategories.pending, (state) => {
-            state.fetchCategoriesStatus = 'loading';
+            state.fetchCategoriesStatus.state = 'loading';
         });
         builder.addCase(fetchCategories.fulfilled, (state, action) => {
             if (action.payload.mode === 'fetch') {
@@ -60,13 +66,19 @@ const categorySlice = createSlice({
                 state.categories.data = [...state.categories.data, ...action.payload.result.data.categories.data];
                 state.categories.paginationInfo = action.payload.result.data.categories.paginationInfo;
             }
-            state.fetchCategoriesStatus = 'success';
+            state.fetchCategoriesStatus.state = 'success';
         });
 
         builder.addCase(createNewCategory.fulfilled, (state, action) => {
             if (action.payload.data) {
                 state.categories.data.unshift(action.payload.data.createCategory);
+                state.createCategoryStatus.state = 'success';
+                state.createCategoryStatus.message = undefined;
             }
+        });
+        builder.addCase(createNewCategory.rejected, (state, action) => {
+            state.createCategoryStatus.state = 'error';
+            state.createCategoryStatus.message = action.error.message;
         });
     },
 });

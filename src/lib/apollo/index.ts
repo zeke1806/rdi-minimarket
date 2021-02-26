@@ -7,14 +7,9 @@ export const apollo = new ApolloClient({
     defaultOptions: {
         watchQuery: {
             fetchPolicy: 'network-only',
-            errorPolicy: 'all',
         },
         query: {
             fetchPolicy: 'network-only',
-            errorPolicy: 'all',
-        },
-        mutate: {
-            errorPolicy: 'all',
         },
     },
 });
