@@ -5,6 +5,7 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
 import { apollo } from './lib/apollo';
 import { store } from './redux/store';
+import SnackBackHandler from './component/public/SnackbarHandler';
 
 const Provider: React.FC = () => {
     return (
@@ -12,6 +13,7 @@ const Provider: React.FC = () => {
             <ApolloProvider client={apollo}>
                 <StatusBar style="auto" />
                 <DrawerNavigator />
+                <SnackBackHandler />
             </ApolloProvider>
         </ReduxProvider>
     );

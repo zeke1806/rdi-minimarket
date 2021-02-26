@@ -31,6 +31,9 @@ const CreateCategory: FC = () => {
             )
                 .then(unwrapResult)
                 .then(() => resetForm())
+                .catch(() => {
+                    //
+                })
                 .finally(() => setSubmitting(false));
         },
     });

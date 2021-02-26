@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { categories, createCategory } from '../lib/apollo/category';
 import { Categories, MutationCreateCategoryArgs, QueryCategoriesArgs } from '../lib/apollo/types';
-import { QueryStatus } from './types';
+import { resetQueryStatus } from './globalActions';
+import { DEFAULT_QUERY_STATE, QueryStatus } from './types';
 
 const sliceName = 'category';
 
@@ -56,6 +57,11 @@ const categorySlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
+        builder.addCase(resetQueryStatus, (state) => {
+            state.createCategoryStatus = DEFAULT_QUERY_STATE;
+            state.fetchCategoriesStatus = DEFAULT_QUERY_STATE;
+        });
+
         builder.addCase(fetchCategories.pending, (state) => {
             state.fetchCategoriesStatus.state = 'loading';
         });
