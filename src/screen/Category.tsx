@@ -20,18 +20,19 @@ const CategoryScreen: FC<Props> = ({ navigation }: Props) => {
     const pagination = useAppSelector((state) => state.category.categories.paginationInfo);
 
     useEffect(() => {
-        dispatch(
-            fetchCategories({
-                variables: {
-                    filterName: '',
-                    pagination: {
-                        take: PAGINATION_TAKE,
+        if (filter === '' && searchTotal)
+            dispatch(
+                fetchCategories({
+                    variables: {
+                        filterName: '',
+                        pagination: {
+                            take: PAGINATION_TAKE,
+                        },
                     },
-                },
-                mode: 'fetch',
-            }),
-        );
-    }, []);
+                    mode: 'fetch',
+                }),
+            );
+    }, [filter]);
 
     const handleChangeFilter = (value: string) => {
         setFilter(value);
@@ -63,9 +64,14 @@ const CategoryScreen: FC<Props> = ({ navigation }: Props) => {
             }}
         >
             <MainLayout navigation={navigation}>
-                <Title text={'Categorie de produit'} />
+                <Title text={'Categorie de produit'} badge={`${pagination.total}`} />
                 <Space nb={2} />
-                <ListCategory loading={loading} data={listCategories} fetchMoreCategory={handleFetchMore} />
+                <ListCategory
+                    loading={loading}
+                    data={listCategories}
+                    fetchMoreCategory={handleFetchMore}
+                    total={searchTotal || pagination.total}
+                />
             </MainLayout>
         </FilterContext.Provider>
     );

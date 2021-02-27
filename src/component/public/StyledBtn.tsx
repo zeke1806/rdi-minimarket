@@ -30,18 +30,21 @@ interface IconBtnProps {
     disabled?: boolean;
     icon: ReactElement;
     circle?: boolean;
+    text?: string;
 }
-export const IconBtn: FC<IconBtnProps> = ({ onPress, circle, disabled, icon: Icon }) => {
+export const IconBtn: FC<IconBtnProps> = ({ onPress, circle, disabled, text, icon: Icon }) => {
     return (
         <TouchableOpacity
             style={[
                 tailwind(`self-start p-3 relative ${circle ? 'rounded-full' : 'rounded-md'}`),
                 disabled ? tailwind('bg-gray-500') : tailwind('bg-tertiary '),
+                tailwind('items-center'),
             ]}
             onPress={onPress}
             disabled={disabled}
         >
             {Icon}
+            {text && <Text style={tailwind('text-white')}>{text}</Text>}
         </TouchableOpacity>
     );
 };

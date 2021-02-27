@@ -34,14 +34,16 @@ const ListFooter: FC<{ loading: boolean }> = ({ loading }) => {
 interface Props {
     loading: boolean;
     data: Category[];
+    total: number;
     fetchMoreCategory: () => void;
 }
-const ListCategory: FC<Props> = ({ loading, data, fetchMoreCategory }) => {
+const ListCategory: FC<Props> = ({ loading, data, fetchMoreCategory, total }) => {
     const [offsetY, setOffsetY] = useState(0);
     const listRef = useRef<FlatList<Category>>(null);
     const fadeAnim = useRef(new Animated.Value(0)).current;
 
     const hideScrollBtn = offsetY < 150;
+    const remainsItems = total - data.length;
 
     useEffect(() => {
         let toValue = 0;
@@ -100,6 +102,7 @@ const ListCategory: FC<Props> = ({ loading, data, fetchMoreCategory }) => {
                     }}
                     icon={<Ionicons name="md-arrow-up" size={24} color="white" />}
                     disabled={hideScrollBtn}
+                    text={remainsItems ? `${remainsItems}` : undefined}
                     circle
                 />
             </Animated.View>
