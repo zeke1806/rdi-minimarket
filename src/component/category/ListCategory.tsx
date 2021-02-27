@@ -1,15 +1,18 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { ListRenderItem, Text, View, Animated } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { tailwind } from '../../lib/tailwind';
 import { Ionicons } from '@expo/vector-icons';
 import { IconBtn } from '../public/StyledBtn';
 import { Category } from '../../lib/apollo/types';
+import { useNavigation } from '@react-navigation/native';
+import { CategoryProductScreenNavigationProp } from '../../navigation/Stock';
 import ListItemCtn from '../public/ListItemCtn';
 import Space from '../public/Space';
 import SearchCategory from './SearchCategory';
 import CreateCategory from './CreateCategory';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import DeleteCategory from './DeleteCategory';
 
 const ListHeader: FC = () => (
     <>
@@ -31,6 +34,34 @@ const ListFooter: FC<{ loading: boolean }> = ({ loading }) => {
     );
 };
 
+const ListItem: FC<{
+    item: Category;
+}> = ({ item }) => {
+    const navigation = useNavigation<CategoryProductScreenNavigationProp>();
+
+    const handlePress = () => {
+        navigation.navigate('category_products', {
+            category: item,
+        });
+    };
+
+    return (
+        <ListItemCtn>
+            <TouchableOpacity containerStyle={tailwind('flex-1')} onPress={handlePress}>
+                <Text style={tailwind('text-white font-bold text-lg')}>{item.name.toUpperCase()}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity containerStyle={tailwind('flex-1 items-center')} onPress={handlePress}>
+                <Text style={tailwind('text-white font-thin')}>
+                    {'20'} produit{2 > 0 ? 's' : ''}
+                </Text>
+            </TouchableOpacity>
+            <View style={tailwind('flex-1')}>
+                <DeleteCategory category={item} />
+            </View>
+        </ListItemCtn>
+    );
+};
+
 interface Props {
     loading: boolean;
     data: Category[];
@@ -44,6 +75,8 @@ const ListCategory: FC<Props> = ({ loading, data, fetchMoreCategory, total }) =>
 
     const hideScrollBtn = offsetY < 150;
     const remainsItems = total - data.length;
+
+    const renderItem: ListRenderItem<Category> = ({ item }) => <ListItem item={item} />;
 
     useEffect(() => {
         let toValue = 0;
@@ -59,22 +92,6 @@ const ListCategory: FC<Props> = ({ loading, data, fetchMoreCategory, total }) =>
         }).start();
     }, [fadeAnim, hideScrollBtn]);
 
-    const renderItem: ListRenderItem<Category> = ({ item }) => (
-        <ListItemCtn>
-            <View style={tailwind('flex-1')}>
-                <Text style={tailwind('text-white font-bold text-lg')}>{item.name.toUpperCase()}</Text>
-            </View>
-            <View style={tailwind('flex-1 items-center')}>
-                <Text style={tailwind('text-white font-thin')}>
-                    {'20'} produit{2 > 0 ? 's' : ''}
-                </Text>
-            </View>
-            <View style={tailwind('flex-1 items-end')}>
-                <Ionicons name="md-trash" size={24} color="red" />
-            </View>
-        </ListItemCtn>
-    );
-
     return (
         <>
             <FlatList
@@ -85,8 +102,11 @@ const ListCategory: FC<Props> = ({ loading, data, fetchMoreCategory, total }) =>
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id.toString()}
                 onScroll={(e) => setOffsetY(e.nativeEvent.contentOffset.y)}
-                onEndReachedThreshold={0.01}
-                onEndReached={() => fetchMoreCategory()}
+                onScrollEndDrag={(e) => {
+                    if (e.nativeEvent.contentOffset.y) {
+                        fetchMoreCategory();
+                    }
+                }}
             />
             <Animated.View
                 style={[

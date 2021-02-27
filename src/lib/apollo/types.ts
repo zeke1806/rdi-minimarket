@@ -21,11 +21,16 @@ export type Category = {
   name: Scalars['String'];
 };
 
+export type CategoriesMeta = {
+  __typename?: 'CategoriesMeta';
+  searchTotal?: Maybe<Scalars['Int']>;
+};
+
 export type Categories = {
   __typename?: 'Categories';
   data: Array<Category>;
   paginationInfo: CPaginationInfo;
-  searchTotal?: Maybe<Scalars['Int']>;
+  meta: CategoriesMeta;
 };
 
 export type CreateCategoryInput = {
@@ -69,6 +74,7 @@ export type CPaginationInfo = {
   __typename?: 'CPaginationInfo';
   cursor?: Maybe<Scalars['Int']>;
   total: Scalars['Int'];
+  more: Scalars['Boolean'];
 };
 
 export type CPaginationInput = {
@@ -84,6 +90,7 @@ export type Product = {
   stock: Scalars['Float'];
   uPrice: Scalars['Float'];
   costPrice: Scalars['Float'];
+  categoryId: Scalars['Int'];
 };
 
 export type CreateProductInput = {

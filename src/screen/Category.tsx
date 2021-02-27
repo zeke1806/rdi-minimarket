@@ -16,23 +16,24 @@ const CategoryScreen: FC<Props> = ({ navigation }: Props) => {
     const dispatch = useAppDispatch();
     const listCategories = useAppSelector((state) => state.category.categories.data);
     const loading = useAppSelector((state) => state.category.fetchCategoriesState) === 'loading';
-    const searchTotal = useAppSelector((state) => state.category.categories.searchTotal);
-    const pagination = useAppSelector((state) => state.category.categories.paginationInfo);
+    const searchTotal = useAppSelector((state) => state.category.categories.meta.searchTotal);
+    const total = useAppSelector((state) => state.category.categories.paginationInfo.total);
+    const cursor = useAppSelector((state) => state.category.categories.paginationInfo.cursor);
+    const more = useAppSelector((state) => state.category.categories.paginationInfo.more);
 
     const handleChangeFilter = (value: string) => {
         setFilter(value);
     };
 
     const handleFetchMore = () => {
-        const total = searchTotal || pagination.total;
-        if (listCategories.length < total) {
+        if (more) {
             dispatch(
                 fetchCategories({
                     variables: {
                         filterName: filter,
                         pagination: {
                             take: PAGINATION_TAKE,
-                            cursor: pagination.cursor,
+                            cursor: cursor,
                         },
                     },
                     mode: 'fetch-more',
@@ -41,7 +42,7 @@ const CategoryScreen: FC<Props> = ({ navigation }: Props) => {
         }
     };
 
-    const fetchWithoutFilter = () =>
+    const fetchWithoutFilter = () => {
         dispatch(
             fetchCategories({
                 variables: {
@@ -53,6 +54,7 @@ const CategoryScreen: FC<Props> = ({ navigation }: Props) => {
                 mode: 'fetch',
             }),
         );
+    };
 
     useEffect(() => {
         fetchWithoutFilter();
@@ -70,13 +72,13 @@ const CategoryScreen: FC<Props> = ({ navigation }: Props) => {
             }}
         >
             <MainLayout navigation={navigation}>
-                <Title text={'Categorie de produit'} badge={`${pagination.total}`} />
+                <Title text={'Categorie de produit'} badge={`${total}`} />
                 <Space nb={2} />
                 <ListCategory
                     loading={loading}
                     data={listCategories}
                     fetchMoreCategory={handleFetchMore}
-                    total={searchTotal || pagination.total}
+                    total={searchTotal || total}
                 />
             </MainLayout>
         </FilterContext.Provider>

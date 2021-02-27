@@ -11,10 +11,12 @@ interface Props {
     searchResult?: string;
     success?: boolean;
     error?: boolean;
+    label?: string;
 }
-const StyledInput: FC<Props> = ({ input: Input, right: Right, searchResult, success, error }) => {
+const StyledInput: FC<Props> = ({ input: Input, right: Right, searchResult, success, error, label }) => {
     return (
         <View>
+            {label && <Text style={tailwind('text-white font-thin pb-1 pl-1')}>{label}</Text>}
             <View
                 style={[styles.shadow, tailwind('p-4 rounded-md flex-row items-center justify-between bg-secondary')]}
             >

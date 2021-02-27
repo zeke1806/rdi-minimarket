@@ -1,20 +1,20 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import StyledInput from '../public/StyledInput';
 import { Ionicons } from '@expo/vector-icons';
 import { TextInput } from 'react-native';
 import { tailwind } from '../../lib/tailwind';
 import { IconBtn } from '../public/StyledBtn';
-import { FilterContext } from '../../screen/Category.context';
+import { useFilterCtx } from '../../screen/Category.context';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { fetchCategories } from '../../redux/categorySlice';
 import { PAGINATION_TAKE } from '../../config';
 import { unwrapResult } from '@reduxjs/toolkit';
 
 const SearchCategory: FC = () => {
-    const { filter, handleChangeFilter } = useContext(FilterContext);
+    const { filter, handleChangeFilter } = useFilterCtx();
     const dispatch = useAppDispatch();
     const total = useAppSelector((state) => state.category.categories.paginationInfo.total);
-    const searchTotal = useAppSelector((state) => state.category.categories.searchTotal);
+    const searchTotal = useAppSelector((state) => state.category.categories.meta.searchTotal);
     const loading = useAppSelector((state) => state.category.fetchCategoriesState) === 'loading';
     const searchResult = searchTotal ? `Resultat de la recherche ${searchTotal} categories sur ${total} ...` : ' ';
 

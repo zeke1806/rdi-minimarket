@@ -20,6 +20,15 @@ export const fetchCategories = createAsyncThunk(
             mode,
         };
     },
+    {
+        condition: (_, { getState }) => {
+            const {
+                category: { fetchCategoriesState },
+            } = getState() as { category: CategoryState };
+            if (fetchCategoriesState === 'loading') return false;
+            return true;
+        },
+    },
 );
 
 export const createNewCategory = createAsyncThunk(
@@ -50,8 +59,11 @@ const initialState: CategoryState = {
         paginationInfo: {
             total: 0,
             cursor: null,
+            more: true,
         },
-        searchTotal: null,
+        meta: {
+            searchTotal: null,
+        },
     },
     fetchCategoriesState: 'stateless',
     createCategoryState: 'stateless',
@@ -77,6 +89,7 @@ const categorySlice = createSlice({
             } else if (action.payload.mode === 'fetch-more') {
                 state.categories.data = [...state.categories.data, ...action.payload.result.data.categories.data];
                 state.categories.paginationInfo = action.payload.result.data.categories.paginationInfo;
+                state.categories.meta = action.payload.result.data.categories.meta;
             }
             state.fetchCategoriesState = 'success';
         });
@@ -84,6 +97,7 @@ const categorySlice = createSlice({
         builder.addCase(createNewCategory.fulfilled, (state, action) => {
             if (action.payload.data) {
                 state.categories.data.unshift(action.payload.data.createCategory);
+                state.categories.paginationInfo.total += 1;
                 state.createCategoryState = 'success';
             }
         });
@@ -91,12 +105,12 @@ const categorySlice = createSlice({
         builder.addCase(deleteCategory.pending, (state) => {
             state.deleteCategoryState = 'loading';
         });
-
         builder.addCase(deleteCategory.fulfilled, (state, action) => {
             state.categories.data.splice(
                 state.categories.data.findIndex((c) => c.id === action.meta.arg.toString()),
                 1,
             );
+            state.categories.paginationInfo.total -= 1;
         });
     },
 });

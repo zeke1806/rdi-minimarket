@@ -22,10 +22,13 @@ const CATEGORIES = gql`
                 ...CategoryFrag
             }
             paginationInfo {
-                cursor
                 total
+                cursor
+                more
             }
-            searchTotal
+            meta {
+                searchTotal
+            }
         }
     }
     ${CATEGORY_FRAG}
