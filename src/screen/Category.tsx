@@ -19,21 +19,6 @@ const CategoryScreen: FC<Props> = ({ navigation }: Props) => {
     const searchTotal = useAppSelector((state) => state.category.categories.searchTotal);
     const pagination = useAppSelector((state) => state.category.categories.paginationInfo);
 
-    useEffect(() => {
-        if (filter === '' && searchTotal)
-            dispatch(
-                fetchCategories({
-                    variables: {
-                        filterName: '',
-                        pagination: {
-                            take: PAGINATION_TAKE,
-                        },
-                    },
-                    mode: 'fetch',
-                }),
-            );
-    }, [filter]);
-
     const handleChangeFilter = (value: string) => {
         setFilter(value);
     };
@@ -55,6 +40,27 @@ const CategoryScreen: FC<Props> = ({ navigation }: Props) => {
             );
         }
     };
+
+    const fetchWithoutFilter = () =>
+        dispatch(
+            fetchCategories({
+                variables: {
+                    filterName: '',
+                    pagination: {
+                        take: PAGINATION_TAKE,
+                    },
+                },
+                mode: 'fetch',
+            }),
+        );
+
+    useEffect(() => {
+        fetchWithoutFilter();
+    }, []);
+
+    useEffect(() => {
+        if (filter === '' && searchTotal) fetchWithoutFilter();
+    }, [filter, searchTotal]);
 
     return (
         <FilterContext.Provider

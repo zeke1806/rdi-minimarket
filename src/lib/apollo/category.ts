@@ -1,7 +1,13 @@
 import { gql } from '@apollo/client';
 import { apollo } from '.';
 import { CATEGORY_FRAG } from './fragment';
-import { Categories, Category, MutationCreateCategoryArgs, QueryCategoriesArgs } from './types';
+import {
+    Categories,
+    Category,
+    MutationCreateCategoryArgs,
+    MutationDelCategoryArgs,
+    QueryCategoriesArgs,
+} from './types';
 
 // CATEGORIES
 
@@ -49,5 +55,23 @@ const CREATE_CATEGORY = gql`
 export const createCategory = (variables: MutationCreateCategoryArgs) =>
     apollo.mutate<CreateCategoryData, MutationCreateCategoryArgs>({
         mutation: CREATE_CATEGORY,
+        variables,
+    });
+
+// DEL_CATEGORY
+
+interface DelCategoryData {
+    delCategory: boolean;
+}
+
+const DEL_CATEGORY = gql`
+    mutation DelCategory($id: Int!) {
+        delCategory(id: $id)
+    }
+`;
+
+export const delCategory = (variables: MutationDelCategoryArgs) =>
+    apollo.mutate<DelCategoryData, MutationDelCategoryArgs>({
+        mutation: DEL_CATEGORY,
         variables,
     });

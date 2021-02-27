@@ -32,10 +32,17 @@ export type CreateCategoryInput = {
   name: Scalars['String'];
 };
 
+export type UpdateCategoryInput = {
+  id: Scalars['Int'];
+  name: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createProduct: Product;
   createCategory: Category;
+  updateCategory: Category;
+  delCategory: Scalars['Boolean'];
 };
 
 
@@ -46,6 +53,16 @@ export type MutationCreateProductArgs = {
 
 export type MutationCreateCategoryArgs = {
   input: CreateCategoryInput;
+};
+
+
+export type MutationUpdateCategoryArgs = {
+  input: UpdateCategoryInput;
+};
+
+
+export type MutationDelCategoryArgs = {
+  id: Scalars['Int'];
 };
 
 export type CPaginationInfo = {

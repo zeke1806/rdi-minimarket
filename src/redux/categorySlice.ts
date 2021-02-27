@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { categories, createCategory } from '../lib/apollo/category';
+import { categories, createCategory, delCategory } from '../lib/apollo/category';
 import { Categories, MutationCreateCategoryArgs, QueryCategoriesArgs } from '../lib/apollo/types';
 import { resetQueryStatus } from './globalActions';
 import { QueryState } from './types';
@@ -30,10 +30,18 @@ export const createNewCategory = createAsyncThunk(
     },
 );
 
+export const deleteCategory = createAsyncThunk(`${sliceName}/delCategory`, async (id: number) => {
+    const result = await delCategory({
+        id,
+    });
+    return result;
+});
+
 interface CategoryState {
     categories: Categories;
     fetchCategoriesState: QueryState;
     createCategoryState: QueryState;
+    deleteCategoryState: QueryState;
 }
 
 const initialState: CategoryState = {
@@ -47,6 +55,7 @@ const initialState: CategoryState = {
     },
     fetchCategoriesState: 'stateless',
     createCategoryState: 'stateless',
+    deleteCategoryState: 'stateless',
 };
 
 const categorySlice = createSlice({
@@ -77,6 +86,17 @@ const categorySlice = createSlice({
                 state.categories.data.unshift(action.payload.data.createCategory);
                 state.createCategoryState = 'success';
             }
+        });
+
+        builder.addCase(deleteCategory.pending, (state) => {
+            state.deleteCategoryState = 'loading';
+        });
+
+        builder.addCase(deleteCategory.fulfilled, (state, action) => {
+            state.categories.data.splice(
+                state.categories.data.findIndex((c) => c.id === action.meta.arg.toString()),
+                1,
+            );
         });
     },
 });
