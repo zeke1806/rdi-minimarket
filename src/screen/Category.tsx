@@ -16,6 +16,7 @@ const CategoryScreen: FC<Props> = ({ navigation }: Props) => {
     const dispatch = useAppDispatch();
     const listCategories = useAppSelector((state) => state.category.categories.data);
     const loading = useAppSelector((state) => state.category.fetchCategoriesState) === 'loading';
+    const searchTotal = useAppSelector((state) => state.category.categories.searchTotal);
     const pagination = useAppSelector((state) => state.category.categories.paginationInfo);
 
     useEffect(() => {
@@ -37,7 +38,8 @@ const CategoryScreen: FC<Props> = ({ navigation }: Props) => {
     };
 
     const handleFetchMore = () => {
-        if (listCategories.length < pagination.total) {
+        const total = searchTotal || pagination.total;
+        if (listCategories.length < total) {
             dispatch(
                 fetchCategories({
                     variables: {

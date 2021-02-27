@@ -12,18 +12,11 @@ import { unwrapResult } from '@reduxjs/toolkit';
 
 const SearchCategory: FC = () => {
     const { filter, handleChangeFilter } = useContext(FilterContext);
-    const [filterMode, setFilterMode] = useState(false);
     const dispatch = useAppDispatch();
     const total = useAppSelector((state) => state.category.categories.paginationInfo.total);
-    const categoryItemsNb = useAppSelector((state) => state.category.categories.data).length;
+    const searchTotal = useAppSelector((state) => state.category.categories.searchTotal);
     const loading = useAppSelector((state) => state.category.fetchCategoriesState) === 'loading';
-    const searchResult = filterMode ? `Resultat de la recherche ${categoryItemsNb} categories sur ${total} ...` : ' ';
-
-    useEffect(() => {
-        if (filter === '') {
-            setFilterMode(false);
-        }
-    }, [filter]);
+    const searchResult = searchTotal ? `Resultat de la recherche ${searchTotal} categories sur ${total} ...` : ' ';
 
     const handleSubmit = () => {
         filter &&
@@ -37,11 +30,7 @@ const SearchCategory: FC = () => {
                     },
                     mode: 'fetch',
                 }),
-            )
-                .then(unwrapResult)
-                .then(() => {
-                    setFilterMode(true);
-                });
+            ).then(unwrapResult);
     };
 
     return (

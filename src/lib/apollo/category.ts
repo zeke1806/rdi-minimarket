@@ -19,6 +19,7 @@ const CATEGORIES = gql`
                 cursor
                 total
             }
+            searchTotal
         }
     }
     ${CATEGORY_FRAG}

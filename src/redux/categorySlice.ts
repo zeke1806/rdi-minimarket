@@ -43,6 +43,7 @@ const initialState: CategoryState = {
             total: 0,
             cursor: null,
         },
+        searchTotal: null,
     },
     fetchCategoriesState: 'stateless',
     createCategoryState: 'stateless',
