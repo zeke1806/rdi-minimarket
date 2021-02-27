@@ -1,4 +1,4 @@
-import React, { createContext, FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { RootDrawerParamList } from '../navigation/Drawer';
 import { useAppDispatch, useAppSelector } from '../redux/store';
@@ -15,7 +15,7 @@ const CategoryScreen: FC<Props> = ({ navigation }: Props) => {
     const [filter, setFilter] = useState('');
     const dispatch = useAppDispatch();
     const listCategories = useAppSelector((state) => state.category.categories.data);
-    const loading = useAppSelector((state) => state.category.fetchCategoriesStatus.state) === 'loading';
+    const loading = useAppSelector((state) => state.category.fetchCategoriesState) === 'loading';
     const pagination = useAppSelector((state) => state.category.categories.paginationInfo);
 
     useEffect(() => {

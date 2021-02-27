@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { categories, createCategory } from '../lib/apollo/category';
 import { Categories, MutationCreateCategoryArgs, QueryCategoriesArgs } from '../lib/apollo/types';
 import { resetQueryStatus } from './globalActions';
-import { DEFAULT_QUERY_STATE, QueryStatus } from './types';
+import { QueryState } from './types';
 
 const sliceName = 'category';
 
@@ -32,8 +32,8 @@ export const createNewCategory = createAsyncThunk(
 
 interface CategoryState {
     categories: Categories;
-    fetchCategoriesStatus: QueryStatus;
-    createCategoryStatus: QueryStatus;
+    fetchCategoriesState: QueryState;
+    createCategoryState: QueryState;
 }
 
 const initialState: CategoryState = {
@@ -44,12 +44,8 @@ const initialState: CategoryState = {
             cursor: null,
         },
     },
-    fetchCategoriesStatus: {
-        state: 'stateless',
-    },
-    createCategoryStatus: {
-        state: 'stateless',
-    },
+    fetchCategoriesState: 'stateless',
+    createCategoryState: 'stateless',
 };
 
 const categorySlice = createSlice({
@@ -58,12 +54,12 @@ const categorySlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(resetQueryStatus, (state) => {
-            state.createCategoryStatus = DEFAULT_QUERY_STATE;
-            state.fetchCategoriesStatus = DEFAULT_QUERY_STATE;
+            state.createCategoryState = 'stateless';
+            state.fetchCategoriesState = 'stateless';
         });
 
         builder.addCase(fetchCategories.pending, (state) => {
-            state.fetchCategoriesStatus.state = 'loading';
+            state.fetchCategoriesState = 'loading';
         });
         builder.addCase(fetchCategories.fulfilled, (state, action) => {
             if (action.payload.mode === 'fetch') {
@@ -72,19 +68,14 @@ const categorySlice = createSlice({
                 state.categories.data = [...state.categories.data, ...action.payload.result.data.categories.data];
                 state.categories.paginationInfo = action.payload.result.data.categories.paginationInfo;
             }
-            state.fetchCategoriesStatus.state = 'success';
+            state.fetchCategoriesState = 'success';
         });
 
         builder.addCase(createNewCategory.fulfilled, (state, action) => {
             if (action.payload.data) {
                 state.categories.data.unshift(action.payload.data.createCategory);
-                state.createCategoryStatus.state = 'success';
-                state.createCategoryStatus.message = undefined;
+                state.createCategoryState = 'success';
             }
-        });
-        builder.addCase(createNewCategory.rejected, (state, action) => {
-            state.createCategoryStatus.state = 'error';
-            state.createCategoryStatus.message = action.error.message;
         });
     },
 });

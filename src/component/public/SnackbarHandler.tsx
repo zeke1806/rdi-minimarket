@@ -1,33 +1,27 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { Snackbar } from 'react-native-paper';
-import { resetQueryStatus } from '../../redux/globalActions';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
+import { actions } from '../../redux/snackbarSlice';
 
 const SnackBackHandler: FC = () => {
-    const [visible, setVisible] = useState(false);
+    const { reset } = actions;
+    const { visible, message } = useAppSelector((state) => state.snackbar);
     const dispatch = useAppDispatch();
-    const createCategoryStatus = useAppSelector((state) => state.category.createCategoryStatus);
-
-    useEffect(() => {
-        if (createCategoryStatus.state === 'error') setVisible(true);
-    }, [createCategoryStatus.state]);
 
     return (
         <Snackbar
             visible={visible}
             onDismiss={() => {
-                setVisible(false);
-                dispatch(resetQueryStatus());
+                dispatch(reset());
             }}
             action={{
                 label: 'Fermer',
                 onPress: () => {
-                    setVisible(false);
-                    dispatch(resetQueryStatus());
+                    dispatch(reset());
                 },
             }}
         >
-            {createCategoryStatus.message && createCategoryStatus.message}
+            {message}
         </Snackbar>
     );
 };

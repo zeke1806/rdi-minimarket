@@ -16,7 +16,7 @@ const SearchCategory: FC = () => {
     const dispatch = useAppDispatch();
     const total = useAppSelector((state) => state.category.categories.paginationInfo.total);
     const categoryItemsNb = useAppSelector((state) => state.category.categories.data).length;
-    const loading = useAppSelector((state) => state.category.fetchCategoriesStatus.state) === 'loading';
+    const loading = useAppSelector((state) => state.category.fetchCategoriesState) === 'loading';
     const searchResult = filterMode ? `Resultat de la recherche ${categoryItemsNb} categories sur ${total} ...` : ' ';
 
     useEffect(() => {

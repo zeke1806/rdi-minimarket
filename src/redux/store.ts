@@ -1,9 +1,11 @@
 import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import { reducer as snackbarReducer } from './snackbarSlice';
 import { reducer as categoryReducer } from './categorySlice';
 
 export const store = configureStore({
     reducer: {
+        snackbar: snackbarReducer,
         category: categoryReducer,
     },
     middleware: getDefaultMiddleware(),
