@@ -1,6 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { categories, createCategory, delCategory } from '../lib/apollo/category';
-import { Categories, MutationCreateCategoryArgs, QueryCategoriesArgs } from '../lib/apollo/types';
+import { categories, createCategory, delCategory, updateCategory } from '../lib/apollo/category';
+import {
+    Categories,
+    MutationCreateCategoryArgs,
+    MutationUpdateCategoryArgs,
+    QueryCategoriesArgs,
+} from '../lib/apollo/types';
 import { resetQueryStatus } from './globalActions';
 import { QueryState } from './types';
 
@@ -46,11 +51,20 @@ export const deleteCategory = createAsyncThunk(`${sliceName}/delCategory`, async
     return result;
 });
 
+export const updateOneCategory = createAsyncThunk(
+    `${sliceName}/updateOneCategory`,
+    async (variables: MutationUpdateCategoryArgs) => {
+        const result = await updateCategory(variables);
+        return result;
+    },
+);
+
 interface CategoryState {
     categories: Categories;
     fetchCategoriesState: QueryState;
     createCategoryState: QueryState;
     deleteCategoryState: QueryState;
+    updateOneCategoryState: QueryState;
 }
 
 const initialState: CategoryState = {
@@ -68,6 +82,7 @@ const initialState: CategoryState = {
     fetchCategoriesState: 'stateless',
     createCategoryState: 'stateless',
     deleteCategoryState: 'stateless',
+    updateOneCategoryState: 'stateless',
 };
 
 const categorySlice = createSlice({
@@ -111,6 +126,18 @@ const categorySlice = createSlice({
                 1,
             );
             state.categories.paginationInfo.total -= 1;
+        });
+
+        builder.addCase(updateOneCategory.pending, (state) => {
+            state.updateOneCategoryState = 'loading';
+        });
+        builder.addCase(updateOneCategory.fulfilled, (state, action) => {
+            const updatedCategory = action.payload.data ? action.payload.data.updateCategory : null;
+            state.categories.data = state.categories.data.map((c) => {
+                if (updatedCategory && updatedCategory.id === c.id) c = { ...c, ...updatedCategory };
+                return c;
+            });
+            state.updateOneCategoryState = 'success';
         });
     },
 });

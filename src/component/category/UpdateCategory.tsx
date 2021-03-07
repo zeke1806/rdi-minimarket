@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import { Category, CreateCategoryInput } from '../../lib/apollo/types';
+import { Category, UpdateCategoryInput } from '../../lib/apollo/types';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { useFormik } from 'formik';
-import { createNewCategory } from '../../redux/categorySlice';
+import { updateOneCategory } from '../../redux/categorySlice';
 import { useAppDispatch } from '../../redux/store';
 import { View } from 'react-native';
 import FormCategory from './FormCategory';
@@ -12,23 +12,24 @@ interface Props {
 }
 const UpdateCategory: FC<Props> = ({ category }) => {
     const dispatch = useAppDispatch();
+    const initialValues: UpdateCategoryInput = {
+        id: parseInt(category.id),
+        name: category.name,
+    };
     const { values, handleChange, handleSubmit, errors, isSubmitting } = useFormik({
-        initialValues: {
-            name: category.name,
-        } as CreateCategoryInput,
+        initialValues,
         validate: (values): Record<string, string> => {
             const errors: Record<string, string> = {};
             if (values.name === '') errors.name = 'Le nom de la categorie est requis';
             return errors;
         },
-        onSubmit: async (values, { setSubmitting, resetForm }): Promise<void> => {
+        onSubmit: async (values, { setSubmitting }): Promise<void> => {
             dispatch(
-                createNewCategory({
+                updateOneCategory({
                     input: values,
                 }),
             )
                 .then(unwrapResult)
-                .then(() => resetForm())
                 .catch(() => {
                     //
                 })

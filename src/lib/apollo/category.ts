@@ -6,6 +6,7 @@ import {
     Category,
     MutationCreateCategoryArgs,
     MutationDelCategoryArgs,
+    MutationUpdateCategoryArgs,
     QueryCategoriesArgs,
 } from './types';
 
@@ -76,5 +77,27 @@ const DEL_CATEGORY = gql`
 export const delCategory = (variables: MutationDelCategoryArgs) =>
     apollo.mutate<DelCategoryData, MutationDelCategoryArgs>({
         mutation: DEL_CATEGORY,
+        variables,
+    });
+
+// UDPATE_CATEGORY
+
+interface UpdateCategoryData {
+    updateCategory: Category;
+}
+
+const UPDATE_CATEGORY = gql`
+    mutation UpdateCategory($input: UpdateCategoryInput!) {
+        updateCategory(input: $input) {
+            ...CategoryFrag
+        }
+    }
+
+    ${CATEGORY_FRAG}
+`;
+
+export const updateCategory = (variables: MutationUpdateCategoryArgs) =>
+    apollo.mutate<UpdateCategoryData, MutationUpdateCategoryArgs>({
+        mutation: UPDATE_CATEGORY,
         variables,
     });

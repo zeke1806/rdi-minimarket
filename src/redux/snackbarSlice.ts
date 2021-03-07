@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createNewCategory } from './categorySlice';
+import { createNewCategory, updateOneCategory } from './categorySlice';
 
 const sliceName = 'snackbar';
 
@@ -26,6 +26,15 @@ const snackbarSlice = createSlice({
         builder.addCase(createNewCategory.rejected, (state, action) => {
             state.visible = true;
             state.message = action.error.message;
+        });
+
+        builder.addCase(updateOneCategory.rejected, (state, action) => {
+            state.visible = true;
+            state.message = action.error.message;
+        });
+        builder.addCase(updateOneCategory.fulfilled, (state) => {
+            state.visible = true;
+            state.message = 'La category a bien ete modifier';
         });
     },
 });
