@@ -46,6 +46,7 @@ const CreateCategory: FC = () => {
                 handleSubmit={handleSubmit}
                 errors={errors}
                 isSubmitting={isSubmitting}
+                submitLabel="Ajouter"
             />
         </View>
     );

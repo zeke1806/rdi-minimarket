@@ -21,8 +21,9 @@ interface Props {
     errors: FormikErrors<CreateCategoryInput>;
     handleSubmit: (e?: React.FormEvent<HTMLFormElement> | undefined) => void;
     isSubmitting: boolean;
+    submitLabel: string;
 }
-const FormCategory: FC<Props> = ({ values, handleChange, errors, handleSubmit, isSubmitting }) => {
+const FormCategory: FC<Props> = ({ values, handleChange, errors, handleSubmit, isSubmitting, submitLabel }) => {
     return (
         <View>
             <StyledInput
@@ -40,7 +41,7 @@ const FormCategory: FC<Props> = ({ values, handleChange, errors, handleSubmit, i
             />
             <Space />
             <View style={tailwind('self-end')}>
-                <SubmitBtn onPress={handleSubmit} disabled={isSubmitting} />
+                <SubmitBtn onPress={handleSubmit} disabled={isSubmitting} label={submitLabel} />
             </View>
         </View>
     );

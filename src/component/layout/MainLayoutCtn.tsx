@@ -1,16 +1,38 @@
 import React, { FC } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Dimensions, StyleSheet, View } from 'react-native';
-import Constants from 'expo-constants';
 import { tailwind } from '../../lib/tailwind';
+import { useHeaderHeight } from '@react-navigation/stack';
+import Constants from 'expo-constants';
 
-const MainLayoutCtn: FC = ({ children }) => {
+type Props = {
+    withoutDrawer?: boolean;
+};
+const MainLayoutCtn: FC<Props> = ({ children, withoutDrawer }) => {
+    const headerHeight = useHeaderHeight();
     return (
         <View style={[tailwind('flex-1'), { paddingTop: Constants.statusBarHeight }]}>
             <LinearGradient colors={['#15203D', '#0D061E']} style={styles.background} />
-            {children}
+            {withoutDrawer ? (
+                <View
+                    style={[
+                        tailwind('p-2'),
+                        {
+                            paddingTop: headerHeight,
+                        },
+                    ]}
+                >
+                    {children}
+                </View>
+            ) : (
+                children
+            )}
         </View>
     );
+};
+
+MainLayoutCtn.defaultProps = {
+    withoutDrawer: false,
 };
 
 const styles = StyleSheet.create({

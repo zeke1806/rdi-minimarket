@@ -2,19 +2,24 @@ import React, { FC } from 'react';
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import { Category } from '../lib/apollo/types';
 import { RouteProp } from '@react-navigation/native';
-import { MaterialIcons } from '@expo/vector-icons';
 import CategoryScreen from '../screen/Category';
 import CategoryProductScreen from '../screen/CategoryProducts';
+import UpdateCategoryScreen from '../screen/UpdateCategory';
 
 type StackParamsList = {
     category: undefined;
     category_products: {
         category: Category;
     };
+    update_category: {
+        category: Category;
+    };
 };
 
 export type CategoryProductScreenNavigationProp = StackNavigationProp<StackParamsList, 'category_products'>;
 export type CategoryProductScreenRouteProp = RouteProp<StackParamsList, 'category_products'>;
+export type UpdateCategoryScreenNavigationProp = StackNavigationProp<StackParamsList, 'update_category'>;
+export type UpdateCategoryScreenRouteProp = RouteProp<StackParamsList, 'update_category'>;
 
 const Stack = createStackNavigator<StackParamsList>();
 
@@ -29,18 +34,15 @@ const StockNavigator: FC = () => {
                     headerTransparent: true,
                     headerTintColor: 'white',
                     title: `Categorie ${route.params.category.name}`,
-                    // eslint-disable-next-line react/display-name
-                    headerRight: () => (
-                        <MaterialIcons
-                            name="update"
-                            size={24}
-                            color="white"
-                            onPress={() => console.log('press update category')}
-                            style={{
-                                paddingRight: 15,
-                            }}
-                        />
-                    ),
+                })}
+            />
+            <Stack.Screen
+                name="update_category"
+                component={UpdateCategoryScreen}
+                options={({ route }) => ({
+                    headerTransparent: true,
+                    headerTintColor: 'white',
+                    title: `Modifier la categorie ${route.params.category.name}`,
                 })}
             />
         </Stack.Navigator>

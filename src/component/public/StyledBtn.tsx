@@ -5,8 +5,9 @@ import { tailwind } from '../../lib/tailwind';
 interface SubmitBtnProps {
     onPress: () => void;
     disabled?: boolean;
+    label: string;
 }
-export const SubmitBtn: FC<SubmitBtnProps> = ({ onPress, disabled }) => {
+export const SubmitBtn: FC<SubmitBtnProps> = ({ onPress, disabled, label }) => {
     return (
         <TouchableOpacity
             style={[
@@ -16,7 +17,7 @@ export const SubmitBtn: FC<SubmitBtnProps> = ({ onPress, disabled }) => {
             onPress={onPress}
             disabled={disabled}
         >
-            <Text style={tailwind('text-white')}>{'Ajouter'}</Text>
+            <Text style={tailwind('text-white')}>{label}</Text>
         </TouchableOpacity>
     );
 };
